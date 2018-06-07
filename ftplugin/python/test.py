@@ -1,7 +1,7 @@
 def f(a, b):
     """
-    @type a: int,float
-    @type b: int,float
+    @type a: float,int
+    @type b: float,int
     """
     return a + b
 
@@ -27,7 +27,6 @@ class A:
             @type b: int
             """
             return a + b
-        print(f.__qualname__)
         return f(a, b)
 
 def g(a, b):
@@ -41,7 +40,6 @@ def g(a, b):
         @type b: int
         """
         return a + b
-    print(f.__qualname__)
     return f(a, b)
 
 addunit = A()
@@ -52,5 +50,3 @@ g(1, 2)
 
 f(1, 2)
 f(1.0, 2.0)
-parameters.logfunctionparameters()
-parameters.logfunctionparameters()

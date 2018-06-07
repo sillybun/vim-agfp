@@ -12,14 +12,13 @@ function! s:AddRecordParameterWrapper() abort
 python3 << endOfPython
 
 import vim
-from shutil import copyfile
 
-vim.current.buffer.append("import parameters", 0)
-vim.current.buffer.append("from parameters import recordparametertype", 0)
+vim.current.buffer.append("import AGFPparameters", 0)
+vim.current.buffer.append("from AGFPparameters import recordparametertype", 0)
 vim.current.buffer.append("bottom")
-vim.current.buffer[-1] = "parameters.logfunctionparameters()"
+vim.current.buffer[-1] = "AGFPparameters.logfunctionparameters()"
 
-copyfile("~/.vim/plugged/vim-agfp/ftplugin/python/parameters.py", ".")
+vim.command("!cp ~/.vim/plugged/vim-agfp/ftplugin/python/AGFPparameters.py .")
 
 for row, line in enumerate(vim.current.buffer):
 	extra = line.lstrip()
@@ -33,11 +32,11 @@ vim.command("w")
 vim.command("!python %")
 
 del vim.current.buffer[-1]
-vim.command("g/import parameters/d")
-vim.command("g/from parameters import recordparametertype/d")
+vim.command("g/import AGFPparameters/d")
+vim.command("g/from AGFPparameters import recordparametertype/d")
 vim.command("g/@recordparametertype/d")
 
-parameterfile = open(".parameters.log", "r")
+parameterfile = open(".AGFPparameters.log", "r")
 parameterinfo = parameterfile.readlines()
 for parafunc in parameterinfo:
 	if parafunc[-1] == ">":
@@ -85,6 +84,8 @@ for parafunc in parameterinfo:
 					    parameterlist[k].strip() + ": " + info.split(":")[1]
 				break
 
+# vim.command("!rm AGFPparameters.py")
+vim.command("!rm .AGFPparameters.log")
 
 endOfPython
 endfunction
