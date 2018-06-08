@@ -1,8 +1,7 @@
-def f(a, b=1):
-    """
-    @type a: int
-    @rtype: int
-    """
-    return a + b
+from typing import List, Set, Dict, Tuple, Text, Optional, AnyStr
 
-f(1)
+def f(a: List[List[int]]) -> int:
+    c: int = 0
+    for b in a:
+        c += sum(b)
+    return c

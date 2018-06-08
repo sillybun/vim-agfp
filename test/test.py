@@ -1,31 +1,13 @@
 def f(a, b=10):
-    """
-    @type a: float,int
-    @type b: float,int
-    """
     return a + b
 
 
 class A:
     def f(self, a, b):
-        """
-        @type self: A
-        @type a: int
-        @type b: int
-        """
         return a + b
 
     def g(self, a, b):
-        """
-        @type self: A
-        @type a: int
-        @type b: int
-        """
         def f(a, b):
-            """
-            @type a: int
-            @type b: int
-            """
             return a + b
         return f(a, b)
 
@@ -33,11 +15,13 @@ def g(a, b):
     """
     @type a: int
     @type b: int
+    @rtype: int
     """
     def f(a, b):
         """
         @type a: int
         @type b: int
+        @rtype: int
         """
         return a + b
     return f(a, b)
