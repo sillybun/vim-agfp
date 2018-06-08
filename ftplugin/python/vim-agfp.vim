@@ -20,6 +20,7 @@ vim.current.buffer.append("bottom")
 vim.current.buffer[-1] = "AGFPparameters.logfunctionparameters()"
 
 path = vim.eval("s:path")
+flag_return_type = vim.eval("g:agfp_display_return_type")
 
 vim.command("!cp {}/parameters.py ./AGFPparameters.py".format(path))
 
@@ -46,6 +47,9 @@ for parafunc in parameterinfo:
 		continue
 	funcname = parafunc.split(">>")[0]
 	argumentinfo = parafunc.split(">>")[1].split(";")[0:-1]
+	argumentdict = dict()
+	for info in argumentinfo:
+		argumentdict[int(info.split(":")[0])] = info.split(":")[1]
 	for row, line in enumerate(vim.current.buffer):
 		extra = line.lstrip()
 		if extra.startswith("def ") and row < len(vim.current.buffer) - 1:
@@ -103,10 +107,17 @@ for parafunc in parameterinfo:
 			if endrow == -1:
 				vim.current.buffer.append(space + '"""', startrow + 1)
 				vim.current.buffer.append(space + '"""', startrow + 2)
-				for k, info in enumerate(argumentinfo):
-					vim.current.buffer.append("", startrow + 2 + k)
-					vim.current.buffer[startrow + 2 + k] = space + "@type " + \
-						parameterlist[k].strip() + ": " + info.split(":")[1]
+				arglen = 0
+				for k in range(len(parameterlist)):
+					if k in argumentdict:
+						vim.current.buffer.append("", startrow + 2 + arglen)
+						vim.current.buffer[startrow + 2 + arglen] = space + "@type " + \
+							parameterlist[k] + ": " + argumentdict[k]
+						arglen += 1
+				if flag_return_type and -1 in argumentdict:
+					vim.current.buffer.append("", startrow + 2 + arglen)
+					vim.current.buffer[startrow + 2 + arglen] = space + "@rtype: "+ argumentdict[-1]
+					arglen += 1
 			else:
 				oldcomment = list()
 				if len(vim.current.buffer[startrow + 1].lstrip()[3:]) != 0:
@@ -119,12 +130,19 @@ for parafunc in parameterinfo:
 					del vim.current.buffer[j]
 				vim.current.buffer.append(space + '"""', startrow + 1)
 				vim.current.buffer.append(space + '"""', startrow + 2)
-				for k, info in enumerate(argumentinfo):
-					vim.current.buffer.append("", startrow + 2 + k)
-					vim.current.buffer[startrow + 2 + k] = space + "@type " + \
-						parameterlist[k].strip() + ": " + info.split(":")[1]
+				arglen = 0
+				for k in range(len(parameterlist)):
+					if k in argumentdict:
+						vim.current.buffer.append("", startrow + 2 + arglen)
+						vim.current.buffer[startrow + 2 + arglen] = space + "@type " + \
+							parameterlist[k] + ": " + argumentdict[k]
+						arglen += 1
+				if flag_return_type and -1 in argumentdict:
+					vim.current.buffer.append("", startrow + 2 + arglen)
+					vim.current.buffer[startrow + 2 + arglen] = space + "@rtype: "+ argumentdict[-1]
+					arglen += 1
 				for k, line in enumerate(oldcomment):
-					vim.current.buffer.append(line, startrow + 2 + len(argumentinfo) + k)
+					vim.current.buffer.append(line, startrow + 2 + arglen + k)
 			break
 
 vim.command('call delete("AGFPparameters.py")')
@@ -138,5 +156,9 @@ endfunction
 " --------------------------------
 
 let s:path = expand('<sfile>:p:h')
+
+if !exists("g:agfp_display_return_type")
+	let g:agfp_display_return_type = 1
+endif
 
 command! RecordParameter :call s:AddRecordParameterWrapper()

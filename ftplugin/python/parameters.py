@@ -18,8 +18,7 @@ def recordparametertype(func):
             return "dict(" + gettypename(key) + "=>" + gettypename(sth[key]) + ")"
         else:
             typestr = str(_type)
-            return typestr[(typestr.find("'") + 1
-                            ):typestr.rfind("'")].split(".")[-1]
+            return typestr[(typestr.find("'") + 1):typestr.rfind("'")]
 
     global FUNCTIONPARAMETERS
 
@@ -29,10 +28,12 @@ def recordparametertype(func):
             FUNCTIONPARAMETERS[func] = dict()
             for i, arg in enumerate(args):
                 FUNCTIONPARAMETERS[func][i] = set([gettypename(arg)])
+            FUNCTIONPARAMETERS[func][-1] = set()
         else:
             for i, arg in enumerate(args):
                 FUNCTIONPARAMETERS[func][i].add(gettypename(arg))
         result = func(*args, **kwargs)
+        FUNCTIONPARAMETERS[func][-1].add(gettypename(result))
         return result
 
     return wrapper
@@ -66,3 +67,4 @@ if __name__ == "__main__":
 
     g(range(10))
     g([1, 2, 3])
+    print(FUNCTIONPARAMETERS)
