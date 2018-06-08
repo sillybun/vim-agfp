@@ -34,7 +34,6 @@ for row, line in enumerate(vim.current.buffer):
 vim.command("w")
 vim.command("!python %")
 
-# del vim.current.buffer[-1]
 vim.command("g/import AGFPparameters/d")
 vim.command("g/from AGFPparameters import recordparametertype/d")
 vim.command("g/@recordparametertype/d")
@@ -94,18 +93,8 @@ for parafunc in parameterinfo:
 						addname = cextra[6: cextra.find("(")]
 						currentname = addname + "." + currentname
 					indentlevel -= 1
-			# print(currentname, funcname)
-			# print(len(currentname), len(funcname))
 			if currentname != funcname:
 				continue
-			# print(currentname, funcname)
-			# functiondefine = extra[4:]
-			# for i in range(row + 1, startrow + 1):
-			# 	functiondefine += vim.current.buffer[i].strip()
-			# functiondefine = functiondefine[(functiondefine.find("(") + 1): (functiondefine.rfind(")"))]
-			# parameterlist = functiondefine.split(",")
-			# parameterlist = [p.strip() for p in parameterlist]
-			# parameterlist = [p if "=" not in p else p[0:p.find("=")] for p in parameterlist]
 			functiondefines = list()
 			for i in range(row, startrow+1):
 				functiondefines.append(vim.current.buffer[i].strip())
@@ -138,8 +127,8 @@ for parafunc in parameterinfo:
 					vim.current.buffer.append(line, startrow + 2 + len(argumentinfo) + k)
 			break
 
-vim.command("!rm AGFPparameters.py")
-vim.command("!rm .AGFPparameters.log")
+vim.command('call delete("AGFPparameters.py")')
+vim.command('call delete(".AGFPparameters.log")')
 
 endOfPython
 endfunction
@@ -150,4 +139,4 @@ endfunction
 
 let s:path = expand('<sfile>:p:h')
 
-command! AddRecordParameterWrapper :call s:AddRecordParameterWrapper()
+command! RecordParameter :call s:AddRecordParameterWrapper()
