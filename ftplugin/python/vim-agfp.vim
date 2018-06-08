@@ -97,13 +97,17 @@ for parafunc in parameterinfo:
 			if currentname != funcname:
 				continue
 			# print(currentname, funcname)
-			functiondefine = extra[4:]
-			for i in range(row + 1, startrow + 1):
-				functiondefine += vim.current.buffer[i].strip()
-			functiondefine = functiondefine[(functiondefine.find("(") + 1): (functiondefine.rfind(")"))]
-			parameterlist = functiondefine.split(",")
-			parameterlist = [p.strip() for p in parameterlist]
-			parameterlist = [p if "=" not in p else p[0:p.find("=")] for p in parameterlist]
+			# functiondefine = extra[4:]
+			# for i in range(row + 1, startrow + 1):
+			# 	functiondefine += vim.current.buffer[i].strip()
+			# functiondefine = functiondefine[(functiondefine.find("(") + 1): (functiondefine.rfind(")"))]
+			# parameterlist = functiondefine.split(",")
+			# parameterlist = [p.strip() for p in parameterlist]
+			# parameterlist = [p if "=" not in p else p[0:p.find("=")] for p in parameterlist]
+			functiondefines = list()
+			for i in range(row, startrow+1):
+				functiondefines.append(vim.current.buffer[i].strip())
+			parameterlist = countparentheses.getargument(functiondefines).split(",")
 			space = " " * (len(line) - len(extra) + 4)
 			if endrow == -1:
 				vim.current.buffer.append(space + '"""', startrow + 1)

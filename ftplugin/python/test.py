@@ -1,4 +1,4 @@
-def f(a, b):
+def f(a, b=10):
     """
     @type a: float,int
     @type b: float,int
