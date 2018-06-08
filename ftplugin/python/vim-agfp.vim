@@ -19,7 +19,9 @@ vim.current.buffer.append("from AGFPparameters import recordparametertype", 0)
 vim.current.buffer.append("bottom")
 vim.current.buffer[-1] = "AGFPparameters.logfunctionparameters()"
 
-vim.command("!cp ~/.vim/plugged/vim-agfp/ftplugin/python/parameters.py ./AGFPparameters.py")
+path = vim.eval("s:path")
+
+vim.command("!cp {}/parameters.py ./AGFPparameters.py".format(path))
 
 for row, line in enumerate(vim.current.buffer):
 	extra = line.lstrip()
@@ -146,26 +148,6 @@ endfunction
 "  Expose our commands to the user
 " --------------------------------
 
-if g:autoformatpython_enabled == 1
-	inoremap <silent> <buffer> <expr> <Cr> (getline('.') != '' && col(".") >= col("$")) ? '<Esc>:FormatCurrentLine<Cr>a<Cr>' : '<Cr>'
-	nnoremap <silent> <buffer> <cr> :FormatCurrentLine<cr><cr>
-endif
-
-function! s:ChangeFormatCurrentLineMode()
-	if g:autoformatpythonstate_mode == 1
-		try
-			iunmap <buffer> <Cr>
-			nunmap <buffer> <Cr>
-		catch
-		endtry
-		echom "Change Mode: Disable"
-		let g:autoformatpythonstate_mode = 0
-	else
-		echom "Change Mode: Enable"
-		inoremap <silent> <buffer> <expr> <Cr> (getline('.') != '' && col(".") >= col("$")) ? '<Esc>:FormatCurrentLine<Cr>a<Cr>' : '<Cr>'
-		nnoremap <silent> <buffer> <cr> :FormatCurrentLine<cr><cr>
-		let g:autoformatpythonstate_mode = 1
-	endif
-endfunction
+let s:path = expand('<sfile>:p:h')
 
 command! AddRecordParameterWrapper :call s:AddRecordParameterWrapper()
