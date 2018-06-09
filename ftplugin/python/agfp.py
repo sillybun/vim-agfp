@@ -31,7 +31,7 @@ class FunctionAna:
         return self.FUNCTION[func]["analysis"]["collapse"]
 
 
-def adddocstring(buffer, doctype: str="Epydoc") -> None:
+def adddocstring_paramtype(buffer, returnflag = False, doctype: str="Epydoc") -> None:
     functionlog = FunctionAna(".AGFPparameters.log")
 
     functioncode = vimbufferutil.AllFunctions()
@@ -42,6 +42,7 @@ def adddocstring(buffer, doctype: str="Epydoc") -> None:
         funcdict = functionlog.FUNCTION[func]
         for _fc in functioncode.functions:
             fc: vimbufferutil.FunctionCode = _fc
+            print(fc.functionname)
             if fc.functionname == func:
                 tfc: vimbufferutil.FunctionCode = fc
                 commentspace = " " * (4 * (fc.indentlevel + 1))
@@ -50,13 +51,17 @@ def adddocstring(buffer, doctype: str="Epydoc") -> None:
                     if str(index) in funcdict["parameters"]:
                         abc.addandwait(commentspace + "@type " + param + ": " +
                                        ", ".join(funcdict["parameters"][str(index)]), fc.endline + 1)
-                for i in range(tfc.docstartline, tfc.docendline + 1):
-                    abc.removeandwait(i + 1)
-                for docline in tfc.docstring:
-                    if "@type" not in docline:
-                        abc.addandwait(commentspace + docline, fc.endline + 1)
+                if returnflag:
+                    abc.addandwait(commentspace + "@rtype: " + ", ".join(funcdict["return"]), fc.endline + 1)
+                if tfc.containdocstring:
+                    for i in range(tfc.docstartline, tfc.docendline + 1):
+                        abc.removeandwait(i + 1)
+                    for docline in tfc.docstring:
+                        if "@type" not in docline and "@rtype" not in docline:
+                            abc.addandwait(commentspace + docline, fc.endline + 1)
                 abc.addandwait(commentspace + '"""', fc.endline + 1)
     abc.conduct(buffer)
+
 
 
 def main() -> None:
@@ -64,4 +69,5 @@ def main() -> None:
     fa.readfromfile("testlog.log")
     print(fa.FUNCTION)
 
-main()
+if __name__ == "__main__":
+    main()

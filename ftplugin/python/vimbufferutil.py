@@ -56,7 +56,7 @@ class FunctionCode:
         if self.indentlevel != 0:
             indentlevel = self.indentlevel
             for i in range(self.startline - 1, -1, -1):
-                cline: str = vim.current.buffer[i]
+                cline: str = buffer[i]
                 if len(cline.strip()) == 0:
                     continue
                 cextra: str = cline.lstrip()
@@ -64,10 +64,13 @@ class FunctionCode:
                 if cindentlevel == indentlevel - 1:
                     if cextra.startswith("def "):
                         addname = cextra[4: cextra.find('(')]
-                        self.functionname = addname + ".<locals>" + self.functionname
+                        self.functionname = addname + ".<locals>." + self.functionname
                     elif cextra.startswith("class "):
                         addname = cextra[6: cextra.find("(")]
                         self.functionname = addname + "." + self.functionname
+                    indentlevel -= 1
+                if indentlevel == 0:
+                    break
         prev = (0, 0, None)
         while True:
             prev = countparentheses.count(buffer[self.endline], prev)

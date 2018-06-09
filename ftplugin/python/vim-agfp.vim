@@ -61,11 +61,11 @@ vim.command("g/from AGFPparameters import recordparametertype/d")
 vim.command("g/@recordparametertype/d")
 vim.command("g/AGFPparameters.logfunctionparameters/d")
 
-agfp.adddocstring(vim.current.buffer)
+agfp.adddocstring_paramtype(vim.current.buffer, flag_return_type)
 
 vim.command("w")
 vim.command('call delete("AGFPparameters.py")')
-vim.command('call delete(".AGFPparameters.log")')
+# vim.command('call delete(".AGFPparameters.log")')
 
 endOfPython
 endfunction
@@ -114,11 +114,11 @@ vim.command("g/from AGFPparameters import recordparametertype/d")
 vim.command("g/@recordparametertype/d")
 vim.command("g/AGFPparameters.logfunctionparameters/d")
 
-agfp.adddocstring(vim.current.buffer)
+agfp.adddocstring_paramtype(vim.current.buffer, flag_return_type)
 
 vim.command("w")
 vim.command('call delete("AGFPparameters.py")')
-vim.command('call delete(".AGFPparameters.log")')
+# vim.command('call delete(".AGFPparameters.log")')
 
 endOfPython
 endfunction
