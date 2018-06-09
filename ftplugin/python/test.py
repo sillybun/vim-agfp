@@ -2,7 +2,6 @@ def f(a, b):
     """
     @type a: float
     @type b: float
-    this is just a test
     """
     return a + b
 

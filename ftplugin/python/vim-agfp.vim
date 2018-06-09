@@ -42,7 +42,7 @@ vim.current.buffer.append("bottom")
 vim.current.buffer[-1] = "AGFPparameters.logfunctionparameters()"
 
 path = vim.eval("s:path")
-flag_return_type = vim.eval("g:agfp_display_return_type")
+flag_return_type = (vim.eval("g:agfp_display_return_type") == "1")
 
 vim.command("!cp {}/parameters.py ./AGFPparameters.py".format(path))
 
@@ -62,6 +62,8 @@ vim.command("g/@recordparametertype/d")
 vim.command("g/AGFPparameters.logfunctionparameters/d")
 
 agfp.adddocstring_paramtype(vim.current.buffer, flag_return_type)
+if vim.eval("g:agfp_display_runtime_info") == "1":
+	agfp.adddocstring_runtime_info(vim.current.buffer)
 
 vim.command("w")
 vim.command('call delete("AGFPparameters.py")')
@@ -102,7 +104,7 @@ vim.current.buffer.append("bottom")
 vim.current.buffer[-1] = "AGFPparameters.logfunctionparameters()"
 
 path = vim.eval("s:path")
-flag_return_type = vim.eval("g:agfp_display_return_type")
+flag_return_type = (vim.eval("g:agfp_display_return_type") == "1")
 
 vim.command("!cp {}/parameters.py ./AGFPparameters.py".format(path))
 
@@ -115,6 +117,8 @@ vim.command("g/@recordparametertype/d")
 vim.command("g/AGFPparameters.logfunctionparameters/d")
 
 agfp.adddocstring_paramtype(vim.current.buffer, flag_return_type)
+if vim.eval("g:agfp_display_runtime_info") == "1":
+	agfp.adddocstring_runtime_info(vim.current.buffer)
 
 vim.command("w")
 vim.command('call delete("AGFPparameters.py")')
@@ -130,7 +134,11 @@ endfunction
 let s:path = expand('<sfile>:p:h')
 
 if !exists("g:agfp_display_return_type")
-	let g:agfp_display_return_type = 1
+	let g:agfp_display_return_type = 0
+endif
+
+if !exists("g:agfp_display_runtime_info")
+	let g:agfp_display_runtime_info = 0
 endif
 
 command! RecordParameter :call s:AddRecordParameterWrapper()
