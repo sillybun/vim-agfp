@@ -1,3 +1,3 @@
 # vim-agfp
 
-This repository is discorded. new repository is: [autodoc](https://github.com/sillybun/vim-autodoc)
+This repository is discarded. new repository is: [autodoc](https://github.com/sillybun/vim-autodoc)
